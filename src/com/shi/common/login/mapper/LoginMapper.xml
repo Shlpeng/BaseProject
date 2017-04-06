@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shi.common.login.mapper.LoginDao">
+   <resultMap id="loginUserMap" type="LoginUser" >
+		<result column="id" property="id" />
+		<result column="nick_name" property="nickName" />
+		<result column="pwd" property="pwd" />
+		<result column="phone" property="phone" />
+		<result column="email" property="email" />
+	</resultMap>
+	
+	<select id="selectUserByModel" parameterType="LoginUser" resultMap="loginUserMap">
+		SELECT id,nick_name,pwd,phone,email FROM t_base_user WHERE 1=1
+        <if test="id != null and id != '' ">  
+            AND id=#{id} 
+        </if>  
+        <if test="nickName !=null and nickName !='' ">  
+			AND nick_name LIKE CONCAT(CONCAT('%', #{nickName}),'%')
+        </if>  
+        <if test="phone !=null and phone !='' ">  
+			AND phone=#{phone} 
+        </if>  
+        <if test="email !=null and email !='' ">  
+			AND email=#{email}
+        </if>
+	</select>
+	<select id="selectUserByMap" parameterType="Map" resultMap="loginUserMap">
+		SELECT id,nick_name,pwd,phone,email FROM t_base_user WHERE 1=1
+        <if test="id != null and id != '' ">  
+            AND id=#{id} 
+        </if>  
+        <if test="nickName !=null and nickName !='' ">  
+			AND nick_name LIKE CONCAT(CONCAT('%', #{nickName}),'%')
+        </if>  
+        <if test="phone !=null and phone !='' ">  
+			AND phone=#{phone} 
+        </if>  
+        <if test="email !=null and email !='' ">  
+			AND email=#{email}
+        </if>
+	</select>
+	
+	<insert id="insertUser" parameterType="LoginUser">
+		INSERT INTO t_base_user
+			(
+				id,nick_name,pwd,phone,email			
+			)
+		VALUES
+			(
+				#{id},#{nickName},#{pwd},#{phone},#{email}
+			)
+	</insert>
+	
+	<update id="updateUser" parameterType="LoginUser">
+		UPDATE t_base_user
+		SET nick_name=#{nickName},pwd=#{pwd},phone=#{phone},email=#{email} WHERE id=#{id}
+	</update>	
+	
+	<delete id="delUser" parameterType="string">
+		DELETE FROM t_base_user WHERE id=#{id}
+	</delete>
+</mapper>

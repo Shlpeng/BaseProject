@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>BaseProject</display-name>
+  
+  <context-param>
+    <param-name>webAppRootKey</param-name>
+    <param-value>BaseProject</param-value>
+  </context-param>
+  <context-param> 
+	<param-name>log4jConfigLocation</param-name> 
+	<param-value>classpath:config/log4j.properties</param-value> 
+  </context-param> 
+  <context-param>
+	<param-name>contextConfigLocation</param-name>
+	<param-value>classpath:config/spring-mybatis.xml</param-value>
+  </context-param>
+  
+  <filter>
+	<filter-name>encodingFilter</filter-name>
+	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	<init-param>
+	  <param-name>encoding</param-name>
+	  <param-value>UTF-8</param-value>
+	</init-param>
+ 	<init-param>
+	  <param-name>forceEncoding</param-name>
+	  <param-value>true</param-value>
+	</init-param> 
+  </filter>
+  <filter-mapping>
+	<filter-name>encodingFilter</filter-name>
+	<url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <listener> 
+	<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class> 
+  </listener> 
+  <listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+    
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/assets/*</url-pattern>
+  </servlet-mapping>
+      
+  <servlet>
+	<servlet-name>springmvc</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<init-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:config/spring-mvc.xml</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>springmvc</servlet-name>
+	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!--  设 定HttpSession的生命周期。这里以分钟计算。如果 session-timeout元素的值为零或负数，则表示会话将永远不会超时。下面的设定指明Session在最长不活动时间为20分钟。过了这个时间，Servlet容器将它 作为无效处理。注意这里和程序里指定的计数单位不同，程序里是以秒为单位。<session-config>只有<session- timeout>这个元素 --> 
+  <session-config> 
+	<session-timeout>20</session-timeout> 
+  </session-config> 
+  	
+  <welcome-file-list>
+    <welcome-file>/WEB-INF/jsp/common/login/index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <error-page>
+ 	<error-code>404</error-code>
+	<location>/WEB-INF/jsp/errorpage/404.jsp</location>
+  </error-page>
+  <!-- 没有访问权限，访问被禁止 -->
+  <error-page>
+	<error-code>405</error-code>
+	<location>/WEB-INF/jsp/errorpage/405.jsp</location>
+  </error-page>
+  <!-- 内部错误 -->
+  <error-page>
+	<error-code>500</error-code>
+	<location>/WEB-INF/jsp/errorpage/500.jsp</location>
+  </error-page> 
+  
+<!--   <security-constraint>  
+    <web-resource-collection>  
+      <web-resource-name>services</web-resource-name>  
+      <url-pattern>/*</url-pattern>  
+    </web-resource-collection>  
+    <user-data-constraint>  
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>  
+    </user-data-constraint>  
+  </security-constraint>   -->
+</web-app>
