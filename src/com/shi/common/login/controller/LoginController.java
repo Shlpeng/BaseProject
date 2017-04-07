@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,5 +89,31 @@ public class LoginController {
 			map.put("flag", false);
 		}
 		return map;
+	}	
+	
+	/**
+	 * 请求访问登录页面
+	 */
+	@RequestMapping(value="/page",method=RequestMethod.GET)
+	public ModelAndView page(){
+		ModelAndView mv=new ModelAndView();
+		mv.setViewName("common/login/page");
+		return mv;
+	}
+
+	@RequestMapping(value="/verify",method=RequestMethod.POST)
+	public ModelAndView verify(LoginUser loginUser){
+		ModelAndView mv=new ModelAndView();
+		mv.addObject("loginUser", loginUser);
+		try{
+		    UsernamePasswordToken token = new UsernamePasswordToken(loginUser.getPhone(), loginUser.getPwd());  
+		    Subject subject = SecurityUtils.getSubject(); 
+		    subject.login(token);  
+			mv.setViewName("common/login/index");
+		}catch(Exception e){
+			logger.error(e);
+			mv.setViewName("common/login/page");
+		}
+		return mv;
 	}
 }
